@@ -2,25 +2,37 @@
 
 
 ;; recv_internal - обращение к контракту из TON
+;; -> 🔹accessing a contract from TON
+;; -> 🔹requesting a contract from TON
 ;; impure - функция изменяет данные смарт-контракта 
+;; -> 🔹function changes smart contract data🔹function changes smart contract data
 ;; slice - некий указатель на ячейку из которого можно читать данные
+;; -> 🔹some pointer to a cell from which you can read data
 () recv_internal(slice in_msg_body) impure {
   ;;slice_bits() возвращает количество битов в slice
+  ;; -> 🔹slice_bits() returns the number of bits in the slice
   ;;throw_if исключение
+  ;; -> 🔹exception
   throw_if(35,in_msg_body.slice_bits() < 32);
   ;; загружаем из слайса uint битности 32
+  ;; -> 🔹load uint from slice with 32 bits
   int n = in_msg_body~load_uint(32);
 
-  ;;get_data берет ячейку из storage c4 регистра 
+  ;;get_data берет ячейку из storage c4 регистра
+  ;; -> 🔹takes a cell from the storage c4 register 
   ;;begin_parse ячейку преобразует в slice 
+  ;; -> 🔹cell is converted to slice
   slice ds = get_data().begin_parse();
   ;; загружаем из слайса uint битности 64
+  ;; -> 🔹load uint from slice with 64 bits
   int total = ds~load_uint(64);
 
   total += n;
 		
   ;; устанавливает значение в ячейку
+  ;; -> 🔹sets the value in the cell
   ;; begin_cell создаем builder end_cell превращаем builder в end_cell
+  ;; -> 🔹begin_cell creates a builder end_cell turns the builder into an end_cell
   ;;
   set_data(begin_cell().store_uint(total, 64).end_cell());
 }
